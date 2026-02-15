@@ -14,7 +14,13 @@ A customizable powerline-style footer for the pi coding agent. This extension pr
 
 ## Installation
 
-Copy the extension files to your pi extensions directory:
+Install from npm using pi:
+
+```bash
+pi install npm:pi-vitals
+```
+
+Or copy the extension files to your pi extensions directory manually:
 
 ```bash
 # Copy to global extensions directory
