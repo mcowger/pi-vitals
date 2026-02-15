@@ -5,6 +5,19 @@
   "type": "module",
   "main": "index.ts",
   "scripts": {},
+  "files": [
+    "*.ts",
+    "*.json",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcowger/pi-vitals.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mcowger/pi-vitals/issues"
+  },
+  "homepage": "https://github.com/mcowger/pi-vitals#readme",
   "keywords": ["pi", "extension", "footer", "powerline"],
   "author": "Matt Cowger",
   "license": "MIT"
