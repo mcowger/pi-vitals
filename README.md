@@ -2,6 +2,8 @@
 
 A customizable powerline-style footer for the pi coding agent. This extension provides a rich, informative status bar at the bottom of the terminal showing model info, git status, token usage, and more.
 
+<img width="1014" height="45" alt="Screenshot 2026-02-15 at 4 44 54 PM" src="https://github.com/user-attachments/assets/278fb369-f3cf-47b9-9a6b-1e49c32ba3c9" />
+
 ## Features
 
 - **Customizable segments**: Choose which info to display on the left and right sides
