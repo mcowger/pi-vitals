@@ -26,6 +26,9 @@
     "pi-package",
     "pi-coding-agent"
   ],
+  "pi": {
+    "extensions": ["./index.ts"]
+  },
   "author": "Matt Cowger",
   "license": "MIT"
 }
