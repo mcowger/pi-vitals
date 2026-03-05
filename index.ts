@@ -1,5 +1,5 @@
 import type { ExtensionAPI, ReadonlyFooterDataProvider, Theme, AssistantMessage } from "@mariozechner/pi-coding-agent";
-import { visibleWidth } from "@mariozechner/pi-tui";
+import { visibleWidth, truncateToWidth } from "@mariozechner/pi-tui";
 
 import type { SegmentContext, StatusLineSegmentId } from "./types.js";
 import { renderSegment } from "./segments.js";
@@ -34,6 +34,8 @@ function buildFooterContent(
   rightSegments: StatusLineSegmentId[],
   availableWidth: number
 ): string {
+  const maxContentWidth = Math.max(0, availableWidth - 2);
+
   // Render left segments
   const leftParts: string[] = [];
   let leftWidth = 0;
@@ -62,19 +64,29 @@ function buildFooterContent(
     rightWidth -= 1; // Remove trailing space
   }
   
-  const leftStr = leftParts.join(" ");
-  const rightStr = rightParts.join(" ");
+  let leftStr = leftParts.join(" ");
+  let rightStr = rightParts.join(" ");
   
-  // If no right segments, just return left with padding
+  // Handle case with no right segments
   if (rightParts.length === 0) {
-    return " " + leftStr + " ";
+    const finalLeft = truncateToWidth(leftStr, maxContentWidth);
+    return " " + finalLeft + " ".repeat(Math.max(0, maxContentWidth - visibleWidth(finalLeft))) + " ";
   }
   
-  // Calculate padding to push right segments to edge
-  const contentWidth = leftWidth + rightWidth;
-  const padding = Math.max(1, availableWidth - contentWidth - 2); // -2 for edge spaces
+  // If right side alone is too big, just show right side
+  if (rightWidth >= maxContentWidth) {
+    return " " + truncateToWidth(rightStr, maxContentWidth) + " ";
+  }
+
+  // Ensure at least 1 space between left and right
+  const maxLeftWidth = maxContentWidth - rightWidth - 1;
+  const finalLeft = truncateToWidth(leftStr, Math.max(0, maxLeftWidth));
+  const finalLeftWidth = visibleWidth(finalLeft);
   
-  return " " + leftStr + " ".repeat(padding) + rightStr + " ";
+  const padding = maxContentWidth - finalLeftWidth - rightWidth;
+  
+  const result = " " + finalLeft + " ".repeat(padding) + rightStr + " ";
+  return truncateToWidth(result, availableWidth);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
