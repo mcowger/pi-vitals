@@ -39,6 +39,7 @@ export type StatusLineSegmentId =
   | "cache_read"
   | "cache_write"
   | "thinking"
+  | "llm_time"
   | "separator"
   | `text:${string}`;
 
@@ -87,6 +88,9 @@ export interface SegmentContext {
   autoCompactEnabled: boolean;
   usingSubscription: boolean;
   sessionStartTime: number;
+  llmWorking: boolean;
+  llmWorkingStartTime: number | null;
+  lastLlmWorkingDuration: number;
   git: GitStatus;
   options: StatusLineSegmentOptions;
   width: number;
