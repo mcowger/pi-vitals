@@ -13,6 +13,7 @@ export interface IconSet {
   input: string;
   output: string;
   thinking: string;
+  llmTime: string;
   separator: string;
   auto: string;
 }
@@ -33,6 +34,7 @@ export const NERD_ICONS: IconSet = {
   input: "\uF090",      // nf-fa-sign_in
   output: "\uF08B",     // nf-fa-sign_out
   thinking: "\uEE9C",   // nf-fa-brain
+  llmTime: "\uE12E",
   separator: "\uE0B1",  // nf-pl-left_soft_divider
   auto: "\uF0068",      // nf-md-lightning_bolt
 };
@@ -53,6 +55,7 @@ export const ASCII_ICONS: IconSet = {
   input: "↑",
   output: "↓",
   thinking: "🧠",
+  llmTime: "⏱",
   separator: "|",
   auto: "⚡",
 };

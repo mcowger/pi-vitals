@@ -99,12 +99,18 @@ export default function powerlineFooter(pi: ExtensionAPI) {
   let footerDataRef: ReadonlyFooterDataProvider | null = null;
   let getThinkingLevelFn: (() => string) | null = null;
   let tuiRef: any = null;
+  let llmWorking = false;
+  let llmWorkingStartTime: number | null = null;
+  let lastLlmWorkingDuration = 0;
 
   // Track session start
   pi.on("session_start", async (_event, ctx) => {
     sessionStartTime = Date.now();
     currentCtx = ctx;
-    
+    llmWorking = false;
+    llmWorkingStartTime = null;
+    lastLlmWorkingDuration = 0;
+
     if (typeof ctx.getThinkingLevel === 'function') {
       getThinkingLevelFn = () => ctx.getThinkingLevel();
     }
@@ -112,6 +118,21 @@ export default function powerlineFooter(pi: ExtensionAPI) {
     if (ctx.hasUI) {
       setupFooter(ctx);
     }
+  });
+
+  pi.on("agent_start", async (_event, _ctx) => {
+    llmWorking = true;
+    llmWorkingStartTime = Date.now();
+    tuiRef?.requestRender();
+  });
+
+  pi.on("agent_end", async (_event, _ctx) => {
+    if (llmWorking && llmWorkingStartTime) {
+      lastLlmWorkingDuration = (Date.now() - llmWorkingStartTime) / 1000;
+    }
+    llmWorking = false;
+    llmWorkingStartTime = null;
+    tuiRef?.requestRender();
   });
 
   // Invalidate git status on file changes
@@ -239,6 +260,9 @@ export default function powerlineFooter(pi: ExtensionAPI) {
       autoCompactEnabled: ctx.settingsManager?.getCompactionSettings?.()?.enabled ?? true,
       usingSubscription,
       sessionStartTime,
+      llmWorking,
+      llmWorkingStartTime,
+      lastLlmWorkingDuration,
       git: gitStatus,
       options: effectiveConfig.segmentOptions ?? {},
       width,
