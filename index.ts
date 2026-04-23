@@ -102,6 +102,7 @@ export default function powerlineFooter(pi: ExtensionAPI) {
 
   // Track session start
   pi.on("session_start", async (_event, ctx) => {
+    // Clear stale references from previous session
     sessionStartTime = Date.now();
     currentCtx = ctx;
     
@@ -112,6 +113,14 @@ export default function powerlineFooter(pi: ExtensionAPI) {
     if (ctx.hasUI) {
       setupFooter(ctx);
     }
+  });
+
+  // Clean up state on session shutdown to avoid stale references
+  pi.on("session_shutdown", async (_event, _ctx) => {
+    currentCtx = null;
+    footerDataRef = null;
+    tuiRef = null;
+    getThinkingLevelFn = null;
   });
 
   // Invalidate git status on file changes
@@ -129,7 +138,9 @@ export default function powerlineFooter(pi: ExtensionAPI) {
       if (gitBranchPatterns.some(p => p.test(cmd))) {
         invalidateGitStatus();
         invalidateGitBranch();
-        setTimeout(() => tuiRef?.requestRender(), 100);
+        setTimeout(() => {
+          if (tuiRef && currentCtx) tuiRef.requestRender();
+        }, 100);
       }
     }
   });
@@ -143,9 +154,12 @@ export default function powerlineFooter(pi: ExtensionAPI) {
     if (gitBranchPatterns.some(p => p.test(event.command))) {
       invalidateGitStatus();
       invalidateGitBranch();
-      setTimeout(() => tuiRef?.requestRender(), 100);
-      setTimeout(() => tuiRef?.requestRender(), 300);
-      setTimeout(() => tuiRef?.requestRender(), 500);
+      const safeRender = () => {
+        if (tuiRef && currentCtx) tuiRef.requestRender();
+      };
+      setTimeout(safeRender, 100);
+      setTimeout(safeRender, 300);
+      setTimeout(safeRender, 500);
     }
   });
 
@@ -260,7 +274,10 @@ export default function powerlineFooter(pi: ExtensionAPI) {
         dispose: unsub,
         invalidate() {},
         render(width: number): string[] {
-          if (!currentCtx) return [];
+          // Guard against stale context after session replacement or exit
+          if (!currentCtx || !currentCtx.sessionManager?.getSessionId) {
+            return [];
+          }
           
           const effectiveConfig = getEffectiveConfig();
           const segmentCtx = buildSegmentContext(currentCtx, width, theme);
