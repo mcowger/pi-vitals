@@ -20,23 +20,23 @@ export interface IconSet {
 
 // Nerd Font icons
 export const NERD_ICONS: IconSet = {
-  pi: "\uE22C",         // nf-oct-pi
-  model: "\uEC19",      // nf-md-chip
-  folder: "\uF115",     // nf-fa-folder_open
+  pi: "\uE22C",         // nf-fae-pi
+  model: "\uEC19",      // nf-cod-chip
+  folder: "\uF115",     // nf-fa-folder_open_o
   repo: "\uEA63",       // nf-cod-repo_forked
-  branch: "\uF126",     // nf-fa-code_fork
+  branch: "\uF126",     // nf-fa-code_branch
   git: "\uF1D3",        // nf-fa-git
-  tokens: "\uE26B",     // nf-seti-html
-  contextPct: "\uE70F", // nf-dev-database
-  contextTotal: "\uE70F", // nf-dev-database
+  tokens: "\uE60E",     // nf-seti-html5 (angle brackets)
+  contextPct: "\uF1C0", // nf-fa-database (was nf-dev-database \uE70F, broken in NF v3)
+  contextTotal: "\uF1C0", // nf-fa-database (was nf-dev-database \uE70F, broken in NF v3)
   cost: "\uF155",       // nf-fa-dollar
   cacheRead: "\uF1C0",  // nf-fa-database
   cacheWrite: "\uF1C0", // nf-fa-database
-  input: "\uF090",      // nf-fa-sign_in
-  output: "\uF08B",     // nf-fa-sign_out
+  input: "\uF090",      // nf-fa-arrow_right_to_bracket
+  output: "\uF08B",     // nf-fa-arrow_right_from_bracket
   thinking: "\uEE9C",   // nf-fa-brain
   separator: "\uE0B1",  // nf-pl-left_soft_divider
-  auto: "\uF0068",      // nf-md-lightning_bolt
+  auto: "\uF0068",      // nf-md-auto_fix
 };
 
 // ASCII/Unicode fallback icons
